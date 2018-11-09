@@ -64,6 +64,15 @@ my project is based on the famous game 2048. If you do not know it, you can chec
 - random
 
 
-
+* checkpoints:
+Duo the first checkpoint ( November 25 ) :
+ 1 - i will finish the ( one player ) mood
+ 2 - finish the set of the ( Vs computer ) mood without the AI
+ 
+Duo the second checkpoint ( Dec 6 ):
+ - i will finish the AI 
+ _ the game will be ready for using 
+ 
+ 
 thanks for your time
 
