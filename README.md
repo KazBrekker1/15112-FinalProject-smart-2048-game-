@@ -1,8 +1,6 @@
 # 15112-FinalProject-smart-2048-game
 
-my project is based on the famous game 2048
-if you do not know it, you can check it on this link ( https://play2048.co/ )
-the used language for this project is ( python 2 )
+my project is based on the famous game 2048. If you do not know it, you can check it on this link ( https://play2048.co/ ). The used language for this project is ( python 2 ).
 
 
 
