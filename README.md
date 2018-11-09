@@ -59,7 +59,7 @@ my project is based on the famous game 2048. If you do not know it, you can chec
    just like the medium mood but with a bigger number of moves the computer can see. 
 
 * the libraries
-# I might include more libraries or change all of them, but these are the libraries that I will use until now 
+note : I might include more libraries or change all of them, but these are the libraries that I will use until now 
 - Tkinter
 - random
 
