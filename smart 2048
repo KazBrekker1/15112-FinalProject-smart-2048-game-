@@ -1,13 +1,15 @@
 # name: Ammar Yasser Karkour
 # 15112 final project
-# smart 2048 game
+# smart 2048 game _ gui
 
 from Tkinter import*
 from logic import *
 from random import seed
 from random import choice
 
+# the first window 
 class playerMode(object):
+    
     def __init__(self,root):
 
         labelfont = ('times', 45, 'bold' )
@@ -26,7 +28,8 @@ class playerMode(object):
         self.vsComputer = Button(root,text = 'VS Computer',bg="orange" ,fg="black"  ,command = self.openVscomputer)
         self.vsComputer.config(font=buttonfont1)
         self.vsComputer.place(x=70 , y = 150)
-        
+
+    # open a window for the onePlayer mode  
     def openOnePlayer(self):
         root.destroy()
         root2 = Tk()
@@ -34,7 +37,8 @@ class playerMode(object):
         root2.geometry("600x525")
         scrreen2 = oneplayer(root2)
         root2.mainloop()
-        
+
+    # open a window for the vsComputer mode
     def openVscomputer(self):
         root.destroy()
         root3 = Tk()
@@ -42,10 +46,11 @@ class playerMode(object):
         screen3 = vsComputer(root3)
         root3.mainloop()
         
-
+#one player window
 class oneplayer(object):
+    
     def __init__(self,root):
-
+        # make a board
         self.game = game_2048()
         self.root = root
         self.root.bind("<Key>",self.key)
@@ -61,17 +66,15 @@ class oneplayer(object):
         
               
 
-        
-    def squares(self):
-   
+    # squares places on Canvas
+    def squares(self):   
         self.dimentions2 = [[[5,5,98,98],[103,5,196,98],[201,5,294,98],[299,5,392,98]],
                             [[5,103,98,196],[103,103,196,196],[201,103,294,196],[299,103,392,196,]],
                             [[5,201,98,294],[103,201,196,294],[201,201,294,294],[299,201,392,294]],
                             [[5,299,98,392],[103,299,196,392],[201,299,294,392],[299,299,392,392]]]
                                                                                                 
-
+    # tracking the keyboard and make  move
     def key(self,event):
-
         kp = repr(event.keysym)        
         if kp == "'Up'":
             self.update(self.game.makeMove('U'))
@@ -84,9 +87,9 @@ class oneplayer(object):
             
          
         
-
+    # update the board after making a move
     def update(self,message):
-
+        # check if the user won
         if message == 'You Win!':
             self.root.destroy()
             root4 = Tk()
@@ -94,7 +97,7 @@ class oneplayer(object):
             root4.geometry("300x250")
             youWin1 = check(root3,self.game.numberOfMoves,'You Win!')
             root4.mainloop()
-            
+        # chek if the user lost    
         elif message == 'Game Over':
             self.root.destroy()
             root5 = Tk()
@@ -102,12 +105,12 @@ class oneplayer(object):
             root5.geometry("300x250")
             youWin1 = check(root5,self.game.numberOfMoves,'Game Over')
             root5.mainloop()
-            
+        # make a changes to the board    
         else:
             self.canvas.delete(ALL)
             for i in range (4):
                 for j in range(4):
-                    
+                    # updating squares and the numbers
                     if self.game.board[i][j] == 0:
                         self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#DCD2CA')
                     if self.game.board[i][j] == 2:
@@ -143,14 +146,18 @@ class oneplayer(object):
                     if self.game.board[i][j] == 2048:
                         self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDC22E')
                         self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '2048',font=("Purisa", 16),fill="#F9F6F2",anchor =CENTER,width=50 )
-
+        # add 1 to the score
         realScore = Label(self.root,text = str(self.game.numberOfMoves))
         realScore.config(font=self.labelfont)
         realScore.place(x = 400, y=10)
-        
 
+
+        
+# vsComputer window
 class vsComputer(object):
+    
     def __init__(self,root):
+        # making two boards
         self.game = game_2048()
         self.game2 = game_2048()
         self.root = root
@@ -174,19 +181,16 @@ class vsComputer(object):
         self.computer.config(font=self.labelfont)
         self.computer.place(x = 760, y=550)
         self.update('countinue')
-        self.update2('countinue')
-        
-              
-        
-        
+        self.update2('countinue')    
+
+    # places of squares on Canvas    
     def squares(self):
-   
         self.dimentions2 = [[[5,5,98,98],[103,5,196,98],[201,5,294,98],[299,5,392,98]],
                             [[5,103,98,196],[103,103,196,196],[201,103,294,196],[299,103,392,196,]],
                             [[5,201,98,294],[103,201,196,294],[201,201,294,294],[299,201,392,294]],
                             [[5,299,98,392],[103,299,196,392],[201,299,294,392],[299,299,392,392]]]
                                                                      
-
+    # tracking the keyboard and make  move
     def key(self,event):
         moves = ['U','D','L','R']
         char = choice(moves)
@@ -200,33 +204,28 @@ class vsComputer(object):
         elif kp == "'Right'":
             self.update(self.game.makeMove('R'))
         self.update2(self.game2.makeMove(char))
-
-        
-        
-
+     
+    # update the board of the user
+    # the same logic that used for the previous one
     def update(self,message):
-
         if message == 'You Win!':
             self.root.destroy()
             root4 = Tk()
             root4.title("You Win!")
             root4.geometry("300x250")
             youWin1 = check(root3,self.game.numberOfMoves,'You Win!')
-            root4.mainloop()
-            
+            root4.mainloop()         
         elif message == 'Game Over':
             self.root.destroy()
             root5 = Tk()
             root5.title("Game Over")
             root5.geometry("300x250")
             youWin1 = check(root5,self.game.numberOfMoves,'Computer Win!')
-            root5.mainloop()
-            
+            root5.mainloop()         
         else:
             self.canvas.delete(ALL)
             for i in range (4):
-                for j in range(4):
-                    
+                for j in range(4):                    
                     if self.game.board[i][j] == 0:
                         self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#DCD2CA')
                     if self.game.board[i][j] == 2:
@@ -262,30 +261,26 @@ class vsComputer(object):
                     if self.game.board[i][j] == 2048:
                         self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDC22E')
                         self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '2048',font=("Purisa", 16),fill="#F9F6F2",anchor =CENTER,width=50 )
-
         realScore = Label(self.root,text = str(self.game.numberOfMoves))
         realScore.config(font=self.labelfont)
         realScore.place(x = 400, y=30)
 
-
-    def update2(self,message):
-        
+    # update the board of the computer
+    def update2(self,message):        
         if message == 'You Win!':
             self.root.destroy()
             root4 = Tk()
             root4.title("You Win!")
             root4.geometry("300x250")
             youWin1 = check(root3,self.game.numberOfMoves,'Computer Win!')
-            root4.mainloop()
-            
+            root4.mainloop()           
         elif message == 'Game Over':
             self.root.destroy()
             root5 = Tk()
             root5.title("Game Over")
             root5.geometry("300x250")
             youWin1 = check(root5,self.game.numberOfMoves,'You Win!')
-            root5.mainloop()
-            
+            root5.mainloop()           
         else:
             self.canvas2.delete(ALL)
             for i in range (4):
@@ -326,19 +321,13 @@ class vsComputer(object):
                     if self.game2.board[i][j] == 2048:
                         self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDC22E')
                         self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '2048',font=("Purisa", 16),fill="#F9F6F2",anchor =CENTER,width=50 )
-
         realScore = Label(self.root,text = str(self.game2.numberOfMoves))
         realScore.config(font=self.labelfont)
         realScore.place(x = 1000, y=30)
-        
-        
+                      
 
 
-    
-            
-
-
-
+# the window that pop-up when the user win or lose
 class check(object):
 
     def __init__(self,root,score,message):
@@ -368,6 +357,7 @@ class check(object):
         self.MainWindow.config(font=buttonfont1)
         self.MainWindow.place(x=120 , y = 205)
 
+    # open a new onePlayer window
     def onePlayer(self):
         self.root.destroy()
         root8 = Tk()
@@ -376,6 +366,7 @@ class check(object):
         scrreen8 = oneplayer(root8)
         root8.mainloop()
 
+    # open a new vsComputer window
     def vsComputer(self):
         self.root.destroy()
         root9 = Tk()
@@ -383,35 +374,10 @@ class check(object):
         root9.geometry("1200x1000")
         scrreen9 = vsComputer(root9)
         root9.mainloop()
-
     
-
+    #Exit the game
     def Exit(self):
         self.root.destroy()
-
-
-
-
-
-        
-
-                    
-                    
-
-                                
-    
-
-        
-
-
-
-
-
-
-
-
-
-
 
 
 
