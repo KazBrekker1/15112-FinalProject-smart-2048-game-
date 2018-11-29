@@ -27,7 +27,17 @@ class playerMode(object):
         
         self.vsComputer = Button(root,text = 'VS Computer',bg="orange" ,fg="black"  ,command = self.openVscomputer)
         self.vsComputer.config(font=buttonfont1)
-        self.vsComputer.place(x=70 , y = 150)
+        self.vsComputer.place(x=69 , y = 150)
+
+        self.MainWindow = Button(root,text = 'AI VS AI',bg="orange" ,fg="black", command = self.openAIvsAI)
+        self.MainWindow.config(font=buttonfont1)
+        self.MainWindow.place(x=90 , y = 205)
+
+
+        self.MainWindow = Button(root,text = 'Exit',bg="orange" ,fg="black", command = self.Exit)
+        self.MainWindow.config(font=buttonfont1)
+        self.MainWindow.place(x=118 , y = 255)
+        
 
     # open a window for the onePlayer mode  
     def openOnePlayer(self):
@@ -45,6 +55,19 @@ class playerMode(object):
         root3.geometry("1200x1000")
         screen3 = vsComputer(root3)
         root3.mainloop()
+
+    #open a window for the AI vs AI mode
+    def openAIvsAI(self):
+        root.destroy()
+        root4 = Tk()
+        root4.geometry("1200x1000")
+        screen4 = AIvsAI(root4)
+        root4.mainloop()
+
+    #Exit the game
+    def Exit(self):
+        root.destroy()
+        
         
 #one player window
 class oneplayer(object):
@@ -94,7 +117,7 @@ class oneplayer(object):
             self.root.destroy()
             root4 = Tk()
             root4.title("You Win!")
-            root4.geometry("300x250")
+            root4.geometry("300x300")
             youWin1 = check(root3,self.game.numberOfMoves,'You Win!')
             root4.mainloop()
         # chek if the user lost    
@@ -102,7 +125,7 @@ class oneplayer(object):
             self.root.destroy()
             root5 = Tk()
             root5.title("Game Over")
-            root5.geometry("300x250")
+            root5.geometry("300x300")
             youWin1 = check(root5,self.game.numberOfMoves,'Game Over')
             root5.mainloop()
         # make a changes to the board    
@@ -159,7 +182,7 @@ class vsComputer(object):
     def __init__(self,root):
         # making two boards
         self.game = game_2048()
-        self.game2 = game_2048()
+        self.game2 = AI1()
         self.root = root
         self.labelfont = ('times', 50, 'bold')
         self.root.bind("<Key>",self.key)
@@ -203,7 +226,7 @@ class vsComputer(object):
             self.update(self.game.makeMove('L'))
         elif kp == "'Right'":
             self.update(self.game.makeMove('R'))
-        self.update2(self.game2.makeMove(char))
+        self.update2(self.game2.makeMove())
      
     # update the board of the user
     # the same logic that used for the previous one
@@ -212,14 +235,14 @@ class vsComputer(object):
             self.root.destroy()
             root4 = Tk()
             root4.title("You Win!")
-            root4.geometry("300x250")
+            root4.geometry("300x300")
             youWin1 = check(root3,self.game.numberOfMoves,'You Win!')
             root4.mainloop()         
         elif message == 'Game Over':
             self.root.destroy()
             root5 = Tk()
             root5.title("Game Over")
-            root5.geometry("300x250")
+            root5.geometry("300x300")
             youWin1 = check(root5,self.game.numberOfMoves,'Computer Win!')
             root5.mainloop()         
         else:
@@ -271,15 +294,189 @@ class vsComputer(object):
             self.root.destroy()
             root4 = Tk()
             root4.title("You Win!")
-            root4.geometry("300x250")
+            root4.geometry("300x300")
             youWin1 = check(root3,self.game.numberOfMoves,'Computer Win!')
             root4.mainloop()           
         elif message == 'Game Over':
             self.root.destroy()
             root5 = Tk()
             root5.title("Game Over")
-            root5.geometry("300x250")
+            root5.geometry("300x300")
             youWin1 = check(root5,self.game.numberOfMoves,'You Win!')
+            root5.mainloop()           
+        else:
+            self.canvas2.delete(ALL)
+            for i in range (4):
+                for j in range(4):
+                    
+                    if self.game2.board[i][j] == 0:
+                        self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#DCD2CA')
+                    if self.game2.board[i][j] == 2:
+                        self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#ECE2D8')
+                        self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '2',font=("Purisa", 40),fill="#776E65",anchor =CENTER,width=50 )              
+                    if self.game2.board[i][j] == 4:
+                        self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDE0C8')
+                        self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '4',font=("Purisa", 40),fill="#776E65",anchor =CENTER,width=50 )
+                    if self.game2.board[i][j] == 8:
+                        self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#F2B179')
+                        self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '8',font=("Purisa", 40),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game2.board[i][j] == 16:
+                        self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#F59563')
+                        self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '16',font=("Purisa", 34),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game2.board[i][j] == 32:
+                        self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#F67C5F')
+                        self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '32',font=("Purisa", 34),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game2.board[i][j] == 64:
+                        self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#F65E3B')
+                        self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '64',font=("Purisa", 34),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game2.board[i][j] == 128:
+                        self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDCF72')
+                        self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '128',font=("Purisa", 22),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game2.board[i][j] == 256:
+                        self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDCC61')
+                        self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '256',font=("Purisa", 22),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game2.board[i][j] == 512:
+                       self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDC750')
+                       self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '512',font=("Purisa", 22),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game2.board[i][j] == 1024:
+                        self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDC53F')
+                        self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '1024',font=("Purisa", 16),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game2.board[i][j] == 2048:
+                        self.canvas2.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDC22E')
+                        self.canvas2.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '2048',font=("Purisa", 16),fill="#F9F6F2",anchor =CENTER,width=50 )
+        realScore = Label(self.root,text = str(self.game2.numberOfMoves))
+        realScore.config(font=self.labelfont)
+        realScore.place(x = 1000, y=30)
+                      
+
+
+
+
+# vsComputer window
+class AIvsAI(object):
+    
+    def __init__(self,root):
+        # making two boards
+        self.game = AI1()
+        self.game2 = AI2()
+        self.root = root
+        self.labelfont = ('times', 50, 'bold')
+        self.canvas = Canvas(width = 395, height = 395,bg = '#BBADA0')
+        self.canvas.place(x= 100, y=120)
+        self.canvas2=Canvas(width = 395, height = 395, bg = '#BBADA0')
+        self.canvas2.place(x= 700, y=120)
+        self.score2 = Label(root,text = "Score : " )
+        self.score2.config(font=self.labelfont)
+        self.score2.place(x = 700, y=30)        
+        self.squares()
+        self.score = Label(root,text = "Score : " )
+        self.score.config(font=self.labelfont)
+        self.score.place(x = 100, y=30)
+        self.you = Label(root,text = "AI 1" )
+        self.you.config(font=self.labelfont)
+        self.you.place(x = 225, y=550)
+        self.computer = Label(root,text = "AI 2" )
+        self.computer.config(font=self.labelfont)
+        self.computer.place(x = 850, y=550)
+        self.start = Button(root, text = "Start" , bg = "orange", fg="black", command = self.hala)
+        self.start.config(font=self.labelfont)
+        self.start.place(x = 495 , y = 600)
+        self.update('countinue')
+        self.update2('countinue')    
+
+    # places of squares on Canvas    
+    def squares(self):
+        self.dimentions2 = [[[5,5,98,98],[103,5,196,98],[201,5,294,98],[299,5,392,98]],
+                            [[5,103,98,196],[103,103,196,196],[201,103,294,196],[299,103,392,196,]],
+                            [[5,201,98,294],[103,201,196,294],[201,201,294,294],[299,201,392,294]],
+                            [[5,299,98,392],[103,299,196,392],[201,299,294,392],[299,299,392,392]]]
+                                                                     
+   
+    def hala(self):
+        
+        
+        self.update(self.game.makeMove())
+        self.update2(self.game2.makeMove())
+        self.root.after(50,self.hala)
+
+        
+
+        
+    # update the board of the user
+    # the same logic that used for the previous one
+    def update(self,message):
+        if message == 'You Win!':
+            self.root.destroy()
+            root4 = Tk()
+            root4.title("AI 1 Win!")
+            root4.geometry("300x300")
+            youWin1 = check(root3,self.game.numberOfMoves,'AI 1 Win!')
+            root4.mainloop()         
+        elif message == 'Game Over':
+            self.root.destroy()
+            root5 = Tk()
+            root5.title("AI 2 Win!")
+            root5.geometry("300x300")
+            youWin1 = check(root5,self.game.numberOfMoves,'AI 2 Win!')
+            root5.mainloop()         
+        else:
+            self.canvas.delete(ALL)
+            for i in range (4):
+                for j in range(4):                    
+                    if self.game.board[i][j] == 0:
+                        self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#DCD2CA')
+                    if self.game.board[i][j] == 2:
+                        self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#ECE2D8')
+                        self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '2',font=("Purisa", 40),fill="#776E65",anchor =CENTER,width=50 )              
+                    if self.game.board[i][j] == 4:
+                        self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDE0C8')
+                        self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '4',font=("Purisa", 40),fill="#776E65",anchor =CENTER,width=50 )
+                    if self.game.board[i][j] == 8:
+                        self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#F2B179')
+                        self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '8',font=("Purisa", 40),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game.board[i][j] == 16:
+                        self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#F59563')
+                        self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '16',font=("Purisa", 34),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game.board[i][j] == 32:
+                        self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#F67C5F')
+                        self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '32',font=("Purisa", 34),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game.board[i][j] == 64:
+                        self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#F65E3B')
+                        self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '64',font=("Purisa", 34),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game.board[i][j] == 128:
+                        self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDCF72')
+                        self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '128',font=("Purisa", 22),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game.board[i][j] == 256:
+                        self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDCC61')
+                        self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '256',font=("Purisa", 22),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game.board[i][j] == 512:
+                       self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDC750')
+                       self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '512',font=("Purisa", 22),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game.board[i][j] == 1024:
+                        self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDC53F')
+                        self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '1024',font=("Purisa", 16),fill="#F9F6F2",anchor =CENTER,width=50 )
+                    if self.game.board[i][j] == 2048:
+                        self.canvas.create_rectangle(self.dimentions2[i][j][0],self.dimentions2[i][j][1],self.dimentions2[i][j][2],self.dimentions2[i][j][3],fill = '#EDC22E')
+                        self.canvas.create_text((self.dimentions2[i][j][0] + self.dimentions2[i][j][2])/2,(self.dimentions2[i][j][1] + self.dimentions2[i][j][3])/2,text= '2048',font=("Purisa", 16),fill="#F9F6F2",anchor =CENTER,width=50 )
+        realScore = Label(self.root,text = str(self.game.numberOfMoves))
+        realScore.config(font=self.labelfont)
+        realScore.place(x = 400, y=30)
+
+    # update the board of the computer
+    def update2(self,message):
+        if message == 'You Win!':
+            self.root.destroy()
+            root4 = Tk()
+            root4.title("AI 2 Win!")
+            root4.geometry("300x300")
+            youWin1 = check(root3,self.game.numberOfMoves,'AI 2 Win!')
+            root4.mainloop()           
+        elif message == 'Game Over':
+            self.root.destroy()
+            root5 = Tk()
+            root5.title("AI 1 Win!")
+            root5.geometry("300x300")
+            youWin1 = check(root5,self.game.numberOfMoves,'AI 1 Win!')
             root5.mainloop()           
         else:
             self.canvas2.delete(ALL)
@@ -353,9 +550,13 @@ class check(object):
         self.MainWindow.config(font=buttonfont1)
         self.MainWindow.place(x=80 , y = 150)
 
+        self.MainWindow = Button(root,text = 'AI VS AI',bg="orange" ,fg="black", command = self.AIvsAI)
+        self.MainWindow.config(font=buttonfont1)
+        self.MainWindow.place(x=98 , y = 205)
+
         self.MainWindow = Button(root,text = 'Exit',bg="orange" ,fg="black", command = self.Exit)
         self.MainWindow.config(font=buttonfont1)
-        self.MainWindow.place(x=120 , y = 205)
+        self.MainWindow.place(x=120 , y = 255)
 
     # open a new onePlayer window
     def onePlayer(self):
@@ -374,7 +575,15 @@ class check(object):
         root9.geometry("1200x1000")
         scrreen9 = vsComputer(root9)
         root9.mainloop()
-    
+    #open AIvsAI window
+    def AIvsAI(self):
+        self.root.destroy()
+        root10 = Tk()
+        root10.title("2048")
+        root10.geometry("1200x1000")
+        scrreen10 = AIvsAI(root10)
+        root10.mainloop()
+        
     #Exit the game
     def Exit(self):
         self.root.destroy()
@@ -386,6 +595,6 @@ class check(object):
 
 root = Tk()
 root.title("2048")
-root.geometry("300x250")
+root.geometry("300x300")
 scrreen1 = playerMode(root)
 root.mainloop()
