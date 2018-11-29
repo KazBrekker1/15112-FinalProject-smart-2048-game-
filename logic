@@ -5,7 +5,6 @@ import copy
 
 
 class game_2048(object):
-    
     #creating a board and save it in __init__ to use it later
     def __init__(self):
         self.board = self.boardLogic()
@@ -37,7 +36,7 @@ class game_2048(object):
     def makeMove(self, key):
         #using the function nectMove to change the board
         tempBoard = copy.deepcopy(self.board)
-        self.board = self.nextMove( key)       
+        self.board = self.nextMove( key)
         #check if we can adding new number to the matrix     
         if tempBoard != self.board :
             self.board = self.addTwoNumbers (1)
@@ -45,14 +44,271 @@ class game_2048(object):
             return    self.board
         else:
             #check if the user lost
-            if self.checkLose() == True:           
+            if self.checkLose() == True:            
                 return 'Game Over'
             return    self.board                    
         #check if the user won
         if self.checkWin() == True :
-            return  'You Win!'  
+            return  'You Win!'
 
+        
     # check if the user won    
+    def checkWin(self):
+        
+        for i in range(4):
+                for j in range(4):
+                    if int(self.board[i][j]) == 2048:
+                        return True
+                    else:
+                        return False
+
+        
+    # check if the user lost                 
+    def checkLose(self):
+        
+        for i in range(4):
+            for j in range(4):
+                if int(self.board[i][j]) == 0:
+                    return False
+        for i in range(3):
+            for j in range(4):
+                if self.board[i][j] == self.board[i+1][j]:
+                    return False
+        for i in range(4):
+            for j in range(3):
+                if self.board[i][j] == self.board[i][j+1]:
+                    return False 
+               
+        return True
+
+
+    #make a move
+    def nextMove(self, userInput):
+        # if the move is up
+        if userInput == 'U':
+            for i in range(1,4):
+                for j in range(4):
+                    
+                    if self.board[i-1][j] == 0:
+                        self.board[i-1][j] = self.board[i][j]
+                        self.board[i][j] = 0
+                        
+                        if (i-2) > -1 and self.board[i-2][j] == 0 :
+                            self.board[i-2][j] = self.board[i-1][j]
+                            self.board[i-1][j] = 0
+                            
+                            if (i-3) > -1 and self.board[i-3][j] == 0 :
+                                self.board[i-3][j] = self.board[i-2][j]
+                                self.board[i-2][j] = 0
+                                
+            for i in range(1,4):
+                for j in range(4):
+                    
+                    if self.board[i-1][j] == self.board[i][j]:
+                        self.board[i-1][j] = (self.board[i-1][j])*2
+                        self.board[i][j] = 0
+                           
+                    if self.board[i-1][j] != 0 and self.board[i-1][j] != self.board[i][j]:
+                        self.board[i-1][j] = self.board[i-1][j]
+                        self.board[i][j] = self.board[i][j]
+
+            for i in range(1,4):
+                for j in range(4):
+                    if self.board[i-1][j] == 0:
+                            self.board[i-1][j] = self.board[i][j]
+                            self.board[i][j] = 0
+                            
+                            if (i-2) > -1 and self.board[i-2][j] == 0 :
+                                self.board[i-2][j] = self.board[i-1][j]
+                                self.board[i-1][j] = 0
+                                
+                                if (i-3) > -1 and self.board[i-3][j] == 0 :
+                                    self.board[i-3][j] = self.board[i-2][j]
+                                    self.board[i-2][j] = 0
+
+        #if the move is down
+        if userInput == 'D':
+            for i in range(2,-1,-1):
+                for j in range(4):
+                    
+                    if self.board[i+1][j] == 0:
+                        self.board[i+1][j] = self.board[i][j]
+                        self.board[i][j] = 0
+                        
+                        if (i+2) < 4 and self.board[i+2][j] == 0  :
+                            self.board[i+2][j] = self.board[i+1][j]
+                            self.board[i+1][j] = 0
+                            
+                            if (i+3) < 4 and self.board[i+3][j] == 0 :
+                                self.board[i+3][j] = self.board[i+2][j]
+                                self.board[i+2][j] = 0
+                                
+            for i in range(2,-1,-1):
+                for j in range(4):
+                    
+                    if self.board[i+1][j] == self.board[i][j]:
+                        self.board[i+1][j] = (self.board[i+1][j])*2
+                        self.board[i][j] = 0
+                        
+                    if self.board[i+1][j] != 0 and self.board[i+1][j] != self.board[i][j]:
+                        self.board[i+1][j] = self.board[i+1][j]
+                        self.board[i][j] = self.board[i][j]
+
+            for i in range(2,-1,-1):
+                for j in range(4):
+                    if self.board[i+1][j] == 0:
+                            self.board[i+1][j] = self.board[i][j]
+                            self.board[i][j] = 0
+                            
+                            if (i+2) < 4 and self.board[i+2][j] == 0  :
+                                self.board[i+2][j] = self.board[i+1][j]
+                                self.board[i+1][j] = 0
+                                
+                                if (i+3) < 4 and self.board[i+3][j] == 0 :
+                                    self.board[i+3][j] = self.board[i+2][j]
+                                    self.board[i+2][j] = 0
+        #if the moveis down       
+        if userInput == 'L':
+            for i in range(4):
+                for j in range(1,4):
+                    
+                    if self.board[i][j-1] == 0:
+                        self.board[i][j-1] = self.board[i][j]
+                        self.board[i][j] = 0
+                        
+                        if (j-2) > -1 and self.board[i][j-2] == 0:
+                            self.board[i][j-2] = self.board[i][j-1]
+                            self.board[i][j-1] = 0
+                            
+                            if (j-3) > -1 and self.board[i][j-3] == 0:
+                                self.board[i][j-3] = self.board[i][j-2]
+                                self.board[i][j-2] = 0
+                    
+            for i in range(4):
+                for j in range(1,4):
+                    
+                    if self.board[i][j-1] == self.board[i][j]:
+                        self.board[i][j-1] = (self.board[i][j-1])*2
+                        self.board[i][j] = 0
+                    
+                    if self.board[i][j-1] != 0 and self.board[i][j-1] != self.board[i][j]:
+                        self.board[i][j-1] = self.board[i][j-1]
+                        self.board[i][j] = self.board[i][j]
+                        
+            for i in range(4):
+                for j in range(1,4):
+                    if self.board[i][j-1] == 0:
+                            self.board[i][j-1] = self.board[i][j]
+                            self.board[i][j] = 0
+                            
+                            if (j-2) > -1 and self.board[i][j-2] == 0:
+                                self.board[i][j-2] = self.board[i][j-1]
+                                self.board[i][j-1] = 0
+                                
+                                if (j-3) > -1 and self.board[i][j-3] == 0:
+                                    self.board[i][j-3] = self.board[i][j-2]
+                                    self.board[i][j-2] = 0
+
+        #if the move is right
+        if userInput == 'R':
+            for i in range(4):
+                for j in range(2,-1,-1):
+                    
+                    if self.board[i][j+1] == 0:
+                        self.board[i][j+1] = self.board[i][j]
+                        self.board[i][j] = 0
+                        
+                        if (j+2) < 4 and self.board[i][j+2] == 0:
+                            self.board[i][j+2] = self.board[i][j+1]
+                            self.board[i][j+1] = 0
+                            
+                            if (j+3) < 4 and self.board[i][j+3] == 0:
+                                self.board[i][j+3] = self.board[i][j+2]
+                                self.board[i][j+2] = 0
+
+            for i in range(4):                
+                for j in range(2,-1,-1):
+                    if self.board[i][j+1] == self.board[i][j]:
+                       self.board[i][j+1] = (self.board[i][j+1])*2
+                       self.board[i][j] = 0
+
+                    if self.board[i][j+1] != 0 and self.board[i][j+1] != self.board[i][j]:
+                        self.board[i][j+1] = self.board[i][j+1]
+                        self.board[i][j] = self.board[i][j]
+
+            for i in range(4):                
+                for j in range(2,-1,-1):
+                    if self.board[i][j+1] == 0:
+                            self.board[i][j+1] = self.board[i][j]
+                            self.board[i][j] = 0
+                            
+                            if (j+2) < 4 and self.board[i][j+2] == 0:
+                                self.board[i][j+2] = self.board[i][j+1]
+                                self.board[i][j+1] = 0
+                                
+                                if (j+3) < 4 and self.board[i][j+3] == 0:
+                                    self.board[i][j+3] = self.board[i][j+2]
+                                    self.board[i][j+2] = 0
+
+
+        return self.board
+
+
+class AI1(object):
+
+    #creating a board and save it in __init__ to use it later
+    def __init__(self):
+        self.board = self.boardLogic()
+        self.numberOfMoves = 0
+
+    #creating a board by creating a 2D MATRIX
+    def boardLogic (self):
+        self.board = []
+        for i in range (4):
+            self.board += [[0]*4]        
+        self.board = self.addTwoNumbers(2)
+        return self.board
+
+    #adding two numbers to the new marix
+    def addTwoNumbers (self,n):
+
+        for i in range(n):
+            nums = [2,2,2,2,2,2,2,2,2,4]
+            newNum  = str((random.sample(nums,1))[0])
+            randomR = random.randrange(4)
+            randomC = random.randrange(4)            
+            while self.board[randomR][randomC] != 0:
+                randomR = random.randrange(4)
+                randomC = random.randrange(4)
+            self.board[randomR][randomC] = int(newNum)           
+        return self.board
+
+    def makeMove(self):
+        #using the function nectMove to change the board
+        tempBoard = copy.deepcopy(self.board)
+        self.board = self.choice()        
+        #check if we can adding new number to the matrix
+        #check if the user won
+        if self.checkWin() == True :
+            return  'You Win!'
+        
+        if tempBoard != self.board :
+            self.board = self.addTwoNumbers (1)
+            self.numberOfMoves += 1
+            return    self.board
+        else:
+            #check if the user lost
+            if self.checkLose() == True:            
+                return 'Game Over'
+            
+            self.nextMove("D")
+            self.numberOfMoves += 1
+            if self.nextMove('R') == self.board:
+                return self.nextMove('L')
+            return self.nextMove('R')
+                    
+        
+
     def checkWin(self):
         
         for i in range(4):
@@ -251,6 +507,315 @@ class game_2048(object):
 
 
         return self.board
-                    
     
+    # in this choice, we choose the move that generate the highest tile
+    # (maximum (512-1024)) / (reached 2048 (1)in 1094 moves!!!)
+    def choice(self):
+        
+        newBoard = copy.deepcopy(self.board)
+        moves = ['L', 'R' ,'D'  ,'U' ]
+        z = []
+        for move in moves:
+            aMove =  self.nextMove(move)
+            c = 0
+            for i in range(4):
+                for j in range(4):
+                    if aMove[i][j] >= c:
+                        c = aMove[i][j]
+            z.append(c)
+        theOne = 0
+        index = z[0]
+        for num in range(1,len(z)):
+            if z[num] >= index:
+                theOne = num
+
+        return self.nextMove(theOne)
+    
+  
+
+class AI2(object):
+
+    #creating a board and save it in __init__ to use it later
+    def __init__(self):
+        self.board = self.boardLogic()
+        self.numberOfMoves = 0
+
+    #creating a board by creating a 2D MATRIX
+    def boardLogic (self):
+        self.board = []
+        for i in range (4):
+            self.board += [[0]*4]        
+        self.board = self.addTwoNumbers(2)
+        return self.board
+
+    #adding two numbers to the new marix
+    def addTwoNumbers (self,n):
+
+        for i in range(n):
+            nums = [2,2,2,2,2,2,2,2,2,4]
+            newNum  = str((random.sample(nums,1))[0])
+            randomR = random.randrange(4)
+            randomC = random.randrange(4)            
+            while self.board[randomR][randomC] != 0:
+                randomR = random.randrange(4)
+                randomC = random.randrange(4)
+            self.board[randomR][randomC] = int(newNum)           
+        return self.board
+
+    def makeMove(self):
+        #using the function nectMove to change the board
+        tempBoard = copy.deepcopy(self.board)
+        self.board = self.choice2()
+      
+        #check if we can adding new number to the matrix
+        #check if the user won
+        if self.checkWin() == True :
+            return  'You Win!'
+        
+        if tempBoard != self.board :
+            self.board = self.addTwoNumbers (1)
+            self.numberOfMoves += 1
+            return    self.board
+        
+        else:
+            #check if the user lost
+            if self.checkLose() == True:   
+                return 'Game Over'        
+
+            self.nextMove("D")
+            self.numberOfMoves += 1
+##            self.board = self.addTwoNumbers (1)
+            if self.nextMove('R') == self.board:
+                return self.nextMove('L')
+            return self.nextMove('R')
+                    
+        
+    def checkWin(self):
+        
+        for i in range(4):
+                for j in range(4):
+                    if int(self.board[i][j]) == 2048:
+                        return True
+                    else:
+                        return False
+
+        
+    # check if the user lost                 
+    def checkLose(self):
+        
+        for i in range(4):
+            for j in range(4):
+                if int(self.board[i][j]) == 0:
+                    return False
+        for i in range(3):
+            for j in range(4):
+                if self.board[i][j] == self.board[i+1][j]:
+                    return False
+        for i in range(4):
+            for j in range(3):
+                if self.board[i][j] == self.board[i][j+1]:
+                    return False              
+        return True
+
+    #make a move
+    def nextMove(self, userInput):
+        
+        # if the move is up
+        if userInput == 'U':
+            for i in range(1,4):
+                for j in range(4):
+                    
+                    if self.board[i-1][j] == 0:
+                        self.board[i-1][j] = self.board[i][j]
+                        self.board[i][j] = 0
+                        
+                        if (i-2) > -1 and self.board[i-2][j] == 0 :
+                            self.board[i-2][j] = self.board[i-1][j]
+                            self.board[i-1][j] = 0
+                            
+                            if (i-3) > -1 and self.board[i-3][j] == 0 :
+                                self.board[i-3][j] = self.board[i-2][j]
+                                self.board[i-2][j] = 0
+                                
+            for i in range(1,4):
+                for j in range(4):
+                    
+                    if self.board[i-1][j] == self.board[i][j]:
+                        self.board[i-1][j] = (self.board[i-1][j])*2
+                        self.board[i][j] = 0
+                           
+                    if self.board[i-1][j] != 0 and self.board[i-1][j] != self.board[i][j]:
+                        self.board[i-1][j] = self.board[i-1][j]
+                        self.board[i][j] = self.board[i][j]
+
+            for i in range(1,4):
+                for j in range(4):
+                    if self.board[i-1][j] == 0:
+                            self.board[i-1][j] = self.board[i][j]
+                            self.board[i][j] = 0
+                            
+                            if (i-2) > -1 and self.board[i-2][j] == 0 :
+                                self.board[i-2][j] = self.board[i-1][j]
+                                self.board[i-1][j] = 0
+                                
+                                if (i-3) > -1 and self.board[i-3][j] == 0 :
+                                    self.board[i-3][j] = self.board[i-2][j]
+                                    self.board[i-2][j] = 0
+
+        #if the move is down
+        if userInput == 'D':
+            for i in range(2,-1,-1):
+                for j in range(4):
+                    
+                    if self.board[i+1][j] == 0:
+                        self.board[i+1][j] = self.board[i][j]
+                        self.board[i][j] = 0
+                        
+                        if (i+2) < 4 and self.board[i+2][j] == 0  :
+                            self.board[i+2][j] = self.board[i+1][j]
+                            self.board[i+1][j] = 0
+                            
+                            if (i+3) < 4 and self.board[i+3][j] == 0 :
+                                self.board[i+3][j] = self.board[i+2][j]
+                                self.board[i+2][j] = 0
+                                
+            for i in range(2,-1,-1):
+                for j in range(4):
+                    
+                    if self.board[i+1][j] == self.board[i][j]:
+                        self.board[i+1][j] = (self.board[i+1][j])*2
+                        self.board[i][j] = 0
+                        
+                    if self.board[i+1][j] != 0 and self.board[i+1][j] != self.board[i][j]:
+                        self.board[i+1][j] = self.board[i+1][j]
+                        self.board[i][j] = self.board[i][j]
+
+            for i in range(2,-1,-1):
+                for j in range(4):
+                    if self.board[i+1][j] == 0:
+                            self.board[i+1][j] = self.board[i][j]
+                            self.board[i][j] = 0
+                            
+                            if (i+2) < 4 and self.board[i+2][j] == 0  :
+                                self.board[i+2][j] = self.board[i+1][j]
+                                self.board[i+1][j] = 0
+                                
+                                if (i+3) < 4 and self.board[i+3][j] == 0 :
+                                    self.board[i+3][j] = self.board[i+2][j]
+                                    self.board[i+2][j] = 0
+        #if the moveis down       
+        if userInput == 'L':
+            for i in range(4):
+                for j in range(1,4):
+                    
+                    if self.board[i][j-1] == 0:
+                        self.board[i][j-1] = self.board[i][j]
+                        self.board[i][j] = 0
+                        
+                        if (j-2) > -1 and self.board[i][j-2] == 0:
+                            self.board[i][j-2] = self.board[i][j-1]
+                            self.board[i][j-1] = 0
+                            
+                            if (j-3) > -1 and self.board[i][j-3] == 0:
+                                self.board[i][j-3] = self.board[i][j-2]
+                                self.board[i][j-2] = 0
+                    
+            for i in range(4):
+                for j in range(1,4):
+                    
+                    if self.board[i][j-1] == self.board[i][j]:
+                        self.board[i][j-1] = (self.board[i][j-1])*2
+                        self.board[i][j] = 0
+                    
+                    if self.board[i][j-1] != 0 and self.board[i][j-1] != self.board[i][j]:
+                        self.board[i][j-1] = self.board[i][j-1]
+                        self.board[i][j] = self.board[i][j]
+                        
+            for i in range(4):
+                for j in range(1,4):
+                    if self.board[i][j-1] == 0:
+                            self.board[i][j-1] = self.board[i][j]
+                            self.board[i][j] = 0
+                            
+                            if (j-2) > -1 and self.board[i][j-2] == 0:
+                                self.board[i][j-2] = self.board[i][j-1]
+                                self.board[i][j-1] = 0
+                                
+                                if (j-3) > -1 and self.board[i][j-3] == 0:
+                                    self.board[i][j-3] = self.board[i][j-2]
+                                    self.board[i][j-2] = 0
+
+        #if the move is right
+        if userInput == 'R':
+            for i in range(4):
+                for j in range(2,-1,-1):
+                    
+                    if self.board[i][j+1] == 0:
+                        self.board[i][j+1] = self.board[i][j]
+                        self.board[i][j] = 0
+                        
+                        if (j+2) < 4 and self.board[i][j+2] == 0:
+                            self.board[i][j+2] = self.board[i][j+1]
+                            self.board[i][j+1] = 0
+                            
+                            if (j+3) < 4 and self.board[i][j+3] == 0:
+                                self.board[i][j+3] = self.board[i][j+2]
+                                self.board[i][j+2] = 0
+
+            for i in range(4):                
+                for j in range(2,-1,-1):
+                    if self.board[i][j+1] == self.board[i][j]:
+                       self.board[i][j+1] = (self.board[i][j+1])*2
+                       self.board[i][j] = 0
+
+                    if self.board[i][j+1] != 0 and self.board[i][j+1] != self.board[i][j]:
+                        self.board[i][j+1] = self.board[i][j+1]
+                        self.board[i][j] = self.board[i][j]
+
+            for i in range(4):                
+                for j in range(2,-1,-1):
+                    if self.board[i][j+1] == 0:
+                            self.board[i][j+1] = self.board[i][j]
+                            self.board[i][j] = 0
+                            
+                            if (j+2) < 4 and self.board[i][j+2] == 0:
+                                self.board[i][j+2] = self.board[i][j+1]
+                                self.board[i][j+1] = 0
+                                
+                                if (j+3) < 4 and self.board[i][j+3] == 0:
+                                    self.board[i][j+3] = self.board[i][j+2]
+                                    self.board[i][j+2] = 0
+
+
+        return self.board
+
+    # in thi choice , we choose the move that generate the bigger number of empty tiles
+    # (maximum (512-1024) )
+    def choice2(self):
+        newBoard = copy.deepcopy(self.board)
+        moves = ['L','R','D'  ,'U' ]
+        z = []
+        for move in moves:
+            aMove =  self.nextMove(move)
+            c = []
+            for i in range(4):
+                for j in range(4):
+                    if aMove[i][j] == 0:
+                        c.append(0)
+            z.append(c)
+        theOne = 0
+        index = z[0]
+        for num in range(1,len(z)):
+            if len(z[num]) >= index:
+                theOne = num
+
+        return self.nextMove(theOne)
+
+
+    
+
+        
+                
+                    
+
 
