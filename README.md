@@ -12,7 +12,7 @@ my project is based on the famous game 2048. If you do not know it, you can chec
  
 * The user experience and the features  :
   when the user runs my code he or she will see the following :
-  1 - a window that asks the player to choose the game mode either ( one player ) or ( VS The Computer ).
+  1 - a window that asks the player to choose the game mode either ( one player ) , ( VS The Computer ) or (AI VS AI)
  
     if the player chooses the ( one player ) mode:
     
@@ -30,8 +30,7 @@ my project is based on the famous game 2048. If you do not know it, you can chec
 
     if the player chooses the ( Vs computer ) mode:
     
-          . the player will see a window that asks the player to choose the difficulty of the game (normal, hard ).
-          # you can know more about the AI that my game will include in the AI section down below.
+          
           
           . the player will see two squares, each square will contains 16 squares (4 x4 ).
           # one of the squares will be the player's square and another one will be the computer's square.
@@ -44,8 +43,14 @@ my project is based on the famous game 2048. If you do not know it, you can chec
             that asks the player to play again or exit the game.
             if the player chooses to play again he will start from the main window. 
             if the player chooses to exit the game will end.
-            
-            
+    
+    if the player chooses the (AI VS AI) mode:
+          . the player will see two squares, each square will contains 16 squares (4 x4 ).
+          # one of the squares will be the AI1's square and another one will be the AI2's square.
+          
+          . each AI use different alogorithm to play the game
+          
+          . when the player press Start, the two AIs will start to play intil one of them win or lose
             
  * the AI  
    in the ( Vs computer ) mode I will include AI to teach the computer how to play the game.
