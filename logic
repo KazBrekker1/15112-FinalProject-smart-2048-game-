@@ -17,6 +17,7 @@ class game_2048(object):
             self.board += [[0]*4]        
         self.board = self.addTwoNumbers(2)
         return self.board
+    
 
     #adding two numbers to the new marix
     def addTwoNumbers (self,n):
@@ -301,12 +302,7 @@ class AI1(object):
             if self.checkLose() == True:            
                 return 'Game Over'
             
-            self.nextMove("D")
-            self.numberOfMoves += 1
-            if self.nextMove('R') == self.board:
-                return self.nextMove('L')
-            return self.nextMove('R')
-                    
+
         
 
     def checkWin(self):
@@ -511,25 +507,41 @@ class AI1(object):
     # in this choice, we choose the move that generate the highest tile
     # (maximum (512-1024)) / (reached 2048 (1)in 1094 moves!!!)
     def choice(self):
-        
         newBoard = copy.deepcopy(self.board)
+        newBoard1 = copy.deepcopy(self.board)
+        newBoard2 = copy.deepcopy(self.board)
+        newBoard3 = copy.deepcopy(self.board)
+        newBoard4 = copy.deepcopy(self.board)
+        boards = [newBoard1,newBoard2,newBoard3,newBoard4]
         moves = ['L', 'R' ,'D'  ,'U' ]
         z = []
-        for move in moves:
-            aMove =  self.nextMove(move)
+        for move in range(len(moves)):
+            self.board = boards[move]
+            aMove =  self.nextMove(moves[move])
             c = 0
             for i in range(4):
                 for j in range(4):
                     if aMove[i][j] >= c:
                         c = aMove[i][j]
-            z.append(c)
+            z.append(c)          
         theOne = 0
         index = z[0]
         for num in range(1,len(z)):
             if z[num] >= index:
                 theOne = num
 
-        return self.nextMove(theOne)
+        for i in range(4):
+            if self.checkLose() is False:
+                if boards[theOne] == newBoard:
+                    boards.pop(theOne)
+                    z.pop(theOne)
+                    theOne = 0
+                    index = z[0]
+                    for num in range(1,len(z)):
+                        if z[num] >= index:
+                            theOne = num
+                    
+        return boards[theOne]
     
   
 
@@ -582,14 +594,7 @@ class AI2(object):
             if self.checkLose() == True:   
                 return 'Game Over'        
 
-            self.nextMove("D")
-            self.numberOfMoves += 1
-##            self.board = self.addTwoNumbers (1)
-            if self.nextMove('R') == self.board:
-                return self.nextMove('L')
-            return self.nextMove('R')
-                    
-        
+
     def checkWin(self):
         
         for i in range(4):
@@ -793,10 +798,16 @@ class AI2(object):
     # (maximum (512-1024) )
     def choice2(self):
         newBoard = copy.deepcopy(self.board)
+        newBoard1 = copy.deepcopy(self.board)
+        newBoard2 = copy.deepcopy(self.board)
+        newBoard3 = copy.deepcopy(self.board)
+        newBoard4 = copy.deepcopy(self.board)
+        boards = [newBoard1,newBoard2,newBoard3,newBoard4]
         moves = ['L','R','D'  ,'U' ]
         z = []
-        for move in moves:
-            aMove =  self.nextMove(move)
+        for move in range(len(moves)):
+            self.board = boards[move]
+            aMove =  self.nextMove(moves[move])
             c = []
             for i in range(4):
                 for j in range(4):
@@ -806,16 +817,21 @@ class AI2(object):
         theOne = 0
         index = z[0]
         for num in range(1,len(z)):
-            if len(z[num]) >= index:
+            if len(z[num]) >= len(index):
                 theOne = num
-
-        return self.nextMove(theOne)
+        for i in range(4):
+            if self.checkLose() is False:
+                if boards[theOne] == newBoard:
+                    boards.pop(theOne)
+                    z.pop(theOne)
+                    theOne = 0
+                    index = z[0]
+                    for num in range(1,len(z)):
+                        if len(z[num]) >= len(index):
+                            theOne = num
+            
+        return boards[theOne]
 
 
     
-
-        
-                
-                    
-
 
