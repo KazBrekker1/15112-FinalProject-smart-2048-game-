@@ -44,7 +44,7 @@ class playerMode(object):
         root.destroy()
         root2 = Tk()
         root2.title("2048")
-        root2.geometry("600x525")
+        root2.geometry("600x600")
         scrreen2 = oneplayer(root2)
         root2.mainloop()
 
@@ -74,6 +74,7 @@ class oneplayer(object):
     
     def __init__(self,root):
         # make a board
+        self.message = "You Lose!"
         self.game = game_2048()
         self.root = root
         self.root.bind("<Key>",self.key)
@@ -84,11 +85,34 @@ class oneplayer(object):
         self.score = Label(root,text = "Score : " )
         self.score.config(font=self.labelfont)
         self.score.place(x = 100, y=10)
+
+        self.Buttonfont = ('times', 30, 'bold' )
+        self.Oneplayer = Button(root,text = 'Back',bg="orange" ,fg="black", command = self.back )
+        self.Oneplayer.config(font=self.Buttonfont)
+        self.Oneplayer.place(x=235 , y=510)
+        
         self.update('countinue')
         self.items = []
         
-              
 
+    
+    def back(self):
+        if self.message == 'You Win!':
+            self.root.destroy()
+            root4 = Tk()
+            root4.title("You Win!")
+            root4.geometry("300x300")
+            youWin1 = check(root4,self.game.numberOfMoves,'You Win!')
+            root4.mainloop()
+        # chek if the user lost    
+        else: 
+            self.root.destroy()
+            root5 = Tk()
+            root5.title("You Lose!")
+            root5.geometry("300x300")
+            youWin1 = check(root5,self.game.numberOfMoves,"You Lose!")
+            root5.mainloop()
+            
     # squares places on Canvas
     def squares(self):   
         self.dimentions2 = [[[5,5,98,98],[103,5,196,98],[201,5,294,98],[299,5,392,98]],
@@ -114,20 +138,17 @@ class oneplayer(object):
     def update(self,message):
         # check if the user won
         if message == 'You Win!':
-            self.root.destroy()
-            root4 = Tk()
-            root4.title("You Win!")
-            root4.geometry("300x300")
-            youWin1 = check(root3,self.game.numberOfMoves,'You Win!')
-            root4.mainloop()
+            self.message = 'You Win!'
+            labelfont = ('times', 32, 'bold')
+            gameOver = Label(self.root,text = "You Win!" )
+            gameOver.config(font=labelfont)
+            gameOver.place(x = 206, y=220)
         # chek if the user lost    
         elif message == 'Game Over':
-            self.root.destroy()
-            root5 = Tk()
-            root5.title("Game Over")
-            root5.geometry("300x300")
-            youWin1 = check(root5,self.game.numberOfMoves,'Game Over')
-            root5.mainloop()
+            labelfont = ('times', 31, 'bold')
+            gameOver = Label(self.root,text = "You Lose!" )
+            gameOver.config(font=labelfont)
+            gameOver.place(x = 206, y=220)
         # make a changes to the board    
         else:
             self.canvas.delete(ALL)
@@ -182,30 +203,60 @@ class vsComputer(object):
     def __init__(self,root):
         # making two boards
         self.game = game_2048()
-        self.game2 = AI1()
+        self.game2 = AI2()
         self.root = root
         self.labelfont = ('times', 50, 'bold')
         self.root.bind("<Key>",self.key)
+
+        self.update1Message = "__"
+        self.update2Message = "__"
         self.canvas = Canvas(width = 395, height = 395,bg = '#BBADA0')
         self.canvas.place(x= 100, y=120)
         self.canvas2=Canvas(width = 395, height = 395, bg = '#BBADA0')
         self.canvas2.place(x= 700, y=120)
+        
         self.score2 = Label(root,text = "Score : " )
         self.score2.config(font=self.labelfont)
         self.score2.place(x = 700, y=30)        
         self.squares()
+        
         self.score = Label(root,text = "Score : " )
         self.score.config(font=self.labelfont)
         self.score.place(x = 100, y=30)
+        
         self.you = Label(root,text = "User" )
         self.you.config(font=self.labelfont)
         self.you.place(x = 225, y=550)
+        
         self.computer = Label(root,text = "Computer" )
         self.computer.config(font=self.labelfont)
         self.computer.place(x = 760, y=550)
+        
+        self.Back = Button(root, text = "Back" , bg = "orange", fg="black", command = self.back)
+        self.Back.config(font=self.labelfont)
+        self.Back.place(x = 495 , y = 600)
+        
         self.update('countinue')
         self.update2('countinue')    
 
+
+    def back(self):
+        if self.update1Message == 'You Win!':
+            self.root.destroy()
+            root4 = Tk()
+            root4.title("You Win!")
+            root4.geometry("300x300")
+            youWin1 = check(root4,self.game.numberOfMoves,'You Win!')
+            root4.mainloop()
+        # chek if the user lost    
+        else: 
+            self.root.destroy()
+            root5 = Tk()
+            root5.title("You Lose!")
+            root5.geometry("300x300")
+            youWin1 = check(root5,self.game.numberOfMoves,"AI win!")
+            root5.mainloop()
+            
     # places of squares on Canvas    
     def squares(self):
         self.dimentions2 = [[[5,5,98,98],[103,5,196,98],[201,5,294,98],[299,5,392,98]],
@@ -231,20 +282,28 @@ class vsComputer(object):
     # update the board of the user
     # the same logic that used for the previous one
     def update(self,message):
-        if message == 'You Win!':
-            self.root.destroy()
-            root4 = Tk()
-            root4.title("You Win!")
-            root4.geometry("300x300")
-            youWin1 = check(root3,self.game.numberOfMoves,'You Win!')
-            root4.mainloop()         
+        if message == 'You Win!' and (self.update2Message == 'AI Lose!' or self.update2Message == "__"):
+            self.update1Message = 'You Win!'
+            self.update2Message = 'AI Lose!'
+            labelfont = ('times', 32, 'bold')
+            gameOver = Label(self.root,text = "You Win!" )
+            gameOver.config(font=labelfont)
+            gameOver.place(x = 206, y=233)
+        # chek if the user lost    
         elif message == 'Game Over':
-            self.root.destroy()
-            root5 = Tk()
-            root5.title("Game Over")
-            root5.geometry("300x300")
-            youWin1 = check(root5,self.game.numberOfMoves,'Computer Win!')
-            root5.mainloop()         
+            if self.update2Message == 'AI Lose!':
+                self.update1Message = 'You Win!'
+                self.update2Message = 'AI Lose!'
+                labelfont = ('times', 32, 'bold')
+                gameOver = Label(self.root,text = "You Win!" )
+                gameOver.config(font=labelfont)
+                gameOver.place(x = 206, y=233)
+            else:
+                self.update1Message = 'You Lose!'
+                labelfont = ('times', 32, 'bold')
+                gameOver = Label(self.root,text = "You Lose!" )
+                gameOver.config(font=labelfont)
+                gameOver.place(x = 206, y=233)         
         else:
             self.canvas.delete(ALL)
             for i in range (4):
@@ -289,21 +348,29 @@ class vsComputer(object):
         realScore.place(x = 400, y=30)
 
     # update the board of the computer
-    def update2(self,message):        
-        if message == 'You Win!':
-            self.root.destroy()
-            root4 = Tk()
-            root4.title("You Win!")
-            root4.geometry("300x300")
-            youWin1 = check(root3,self.game.numberOfMoves,'Computer Win!')
-            root4.mainloop()           
+    def update2(self,message):
+        if message == 'You Win!' and (self.update1Message == 'AI Lose!' or self.update1Message == "__"):
+            self.update2Message = 'You Win!'
+            self.update1Message = 'AI Lose!'
+            labelfont = ('times', 32, 'bold')
+            gameOver = Label(self.root,text = "AI Win! " )
+            gameOver.config(font=labelfont)
+            gameOver.place(x = 808, y=233)
+        # chek if the user lost    
         elif message == 'Game Over':
-            self.root.destroy()
-            root5 = Tk()
-            root5.title("Game Over")
-            root5.geometry("300x300")
-            youWin1 = check(root5,self.game.numberOfMoves,'You Win!')
-            root5.mainloop()           
+            if self.update1Message == 'You Lose!':
+                self.update2Message = 'AI Win! '
+                self.update1Message = 'You Lose!'
+                labelfont = ('times', 32, 'bold')
+                gameOver = Label(self.root,text = "AI Win! " )
+                gameOver.config(font=labelfont)
+                gameOver.place(x = 808, y=233)
+            else:
+                self.update2Message = "AI Lose!"
+                labelfont = ('times', 32, 'bold')
+                gameOver = Label(self.root,text = "AI Lose!" )
+                gameOver.config(font=labelfont)
+                gameOver.place(x = 808, y=233)           
         else:
             self.canvas2.delete(ALL)
             for i in range (4):
@@ -359,8 +426,11 @@ class AIvsAI(object):
         # making two boards
         self.game = AI1()
         self.game2 = AI2()
+        self.update1Message = "__"
+        self.update2Message = "__"
         self.root = root
         self.labelfont = ('times', 50, 'bold')
+        self.Buttonfont = ('times', 30, 'bold' )
         self.canvas = Canvas(width = 395, height = 395,bg = '#BBADA0')
         self.canvas.place(x= 100, y=120)
         self.canvas2=Canvas(width = 395, height = 395, bg = '#BBADA0')
@@ -379,11 +449,32 @@ class AIvsAI(object):
         self.computer.config(font=self.labelfont)
         self.computer.place(x = 850, y=550)
         self.start = Button(root, text = "Start" , bg = "orange", fg="black", command = self.hala)
-        self.start.config(font=self.labelfont)
-        self.start.place(x = 495 , y = 600)
+        self.start.config(font=self.Buttonfont)
+        self.start.place(x = 540 , y = 600)
+        self.Back = Button(root, text = "Back" , bg = "orange", fg="black", command = self.back)
+        self.Back.config(font=self.Buttonfont)
+        self.Back.place(x = 540 , y = 700)
         self.update('countinue')
         self.update2('countinue')    
 
+
+    def back(self):
+        if self.update1Message == 'AI1 Win!':
+            self.root.destroy()
+            root4 = Tk()
+            root4.title("AI1 Win!")
+            root4.geometry("300x300")
+            youWin1 = check(root4,self.game.numberOfMoves,'AI1 Win!')
+            root4.mainloop()
+        # chek if the user lost    
+        else: 
+            self.root.destroy()
+            root5 = Tk()
+            root5.title("AI2 Win!")
+            root5.geometry("300x300")
+            youWin1 = check(root5,self.game.numberOfMoves,"AI2 win!")
+            root5.mainloop()
+            
     # places of squares on Canvas    
     def squares(self):
         self.dimentions2 = [[[5,5,98,98],[103,5,196,98],[201,5,294,98],[299,5,392,98]],
@@ -397,7 +488,7 @@ class AIvsAI(object):
         
         self.update(self.game.makeMove())
         self.update2(self.game2.makeMove())
-        self.root.after(50,self.hala)
+        self.root.after(500,self.hala)
 
         
 
@@ -405,20 +496,28 @@ class AIvsAI(object):
     # update the board of the user
     # the same logic that used for the previous one
     def update(self,message):
-        if message == 'You Win!':
-            self.root.destroy()
-            root4 = Tk()
-            root4.title("AI 1 Win!")
-            root4.geometry("300x300")
-            youWin1 = check(root3,self.game.numberOfMoves,'AI 1 Win!')
-            root4.mainloop()         
+        if message == 'You Win!' and (self.update2Message == 'AI2 Lose!' or self.update2Message == "__"):
+            self.update1Message = 'AI1 Win!'
+            self.update2Message = 'AI2 Lose!'
+            labelfont = ('times', 32, 'bold')
+            gameOver = Label(self.root,text = "AI1 Win!" )
+            gameOver.config(font=labelfont)
+            gameOver.place(x = 206, y=233)
+        # chek if the user lost    
         elif message == 'Game Over':
-            self.root.destroy()
-            root5 = Tk()
-            root5.title("AI 2 Win!")
-            root5.geometry("300x300")
-            youWin1 = check(root5,self.game.numberOfMoves,'AI 2 Win!')
-            root5.mainloop()         
+            if self.update2Message == 'AI2 Lose!':
+                self.update1Message = 'AI1 Win!'
+                self.update2Message = 'AI2 Lose!'
+                labelfont = ('times', 32, 'bold')
+                gameOver = Label(self.root,text = "AI1 Win!" )
+                gameOver.config(font=labelfont)
+                gameOver.place(x = 206, y=233)
+            else:
+                self.update1Message = 'AI1 Lose!'
+                labelfont = ('times', 32, 'bold')
+                gameOver = Label(self.root,text = "AI1 Lose!" )
+                gameOver.config(font=labelfont)
+                gameOver.place(x = 206, y=233)         
         else:
             self.canvas.delete(ALL)
             for i in range (4):
@@ -464,20 +563,28 @@ class AIvsAI(object):
 
     # update the board of the computer
     def update2(self,message):
-        if message == 'You Win!':
-            self.root.destroy()
-            root4 = Tk()
-            root4.title("AI 2 Win!")
-            root4.geometry("300x300")
-            youWin1 = check(root3,self.game.numberOfMoves,'AI 2 Win!')
-            root4.mainloop()           
+        if message == 'You Win!' and (self.update1Message == 'AI2 Lose!' or self.update1Message == "__"):
+            self.update2Message = 'AI2 Win!'
+            self.update1Message = 'AI1 Lose!'
+            labelfont = ('times', 32, 'bold')
+            gameOver = Label(self.root,text = "AI2 Win! " )
+            gameOver.config(font=labelfont)
+            gameOver.place(x = 808, y=233)
+        # chek if the user lost    
         elif message == 'Game Over':
-            self.root.destroy()
-            root5 = Tk()
-            root5.title("AI 1 Win!")
-            root5.geometry("300x300")
-            youWin1 = check(root5,self.game.numberOfMoves,'AI 1 Win!')
-            root5.mainloop()           
+            if self.update1Message == 'AI1 Lose!':
+                self.update2Message = 'AI2 Win! '
+                self.update1Message = 'AI1 Lose!'
+                labelfont = ('times', 32, 'bold')
+                gameOver = Label(self.root,text = "AI2 Win! " )
+                gameOver.config(font=labelfont)
+                gameOver.place(x = 808, y=233)
+            else:
+                self.update2Message = "AI2 Lose!"
+                labelfont = ('times', 32, 'bold')
+                gameOver = Label(self.root,text = "AI2 Lose!" )
+                gameOver.config(font=labelfont)
+                gameOver.place(x = 808, y=233)           
         else:
             self.canvas2.delete(ALL)
             for i in range (4):
@@ -563,12 +670,13 @@ class check(object):
         self.root.destroy()
         root8 = Tk()
         root8.title("2048")
-        root8.geometry("600x525")
+        root8.geometry("600x600")
         scrreen8 = oneplayer(root8)
         root8.mainloop()
 
     # open a new vsComputer window
     def vsComputer(self):
+##        self.anotherRoot.destroy()
         self.root.destroy()
         root9 = Tk()
         root9.title("2048")
