@@ -805,33 +805,232 @@ class AI2(object):
         boards = [newBoard1,newBoard2,newBoard3,newBoard4]
         moves = ['L','R','D'  ,'U' ]
         z = []
+        #count how many zeros in each board
         for move in range(len(moves)):
             self.board = boards[move]
             aMove =  self.nextMove(moves[move])
-            c = []
+            c = 0
             for i in range(4):
                 for j in range(4):
                     if aMove[i][j] == 0:
-                        c.append(0)
+                        c += 1
             z.append(c)
-        theOne = 0
-        index = z[0]
-        for num in range(1,len(z)):
-            if len(z[num]) >= len(index):
-                theOne = num
+                
+        # count the score for each board    
+        if len(z) > 1:
+            for i in range(len(boards)):
+                z[i] = self.chieck(z[i],boards[i])
+            
+        print z
+        # choose the board with the highest score 
+        theOne = z.index(max(z))        
         for i in range(4):
             if self.checkLose() is False:
                 if boards[theOne] == newBoard:
                     boards.pop(theOne)
                     z.pop(theOne)
-                    theOne = 0
-                    index = z[0]
-                    for num in range(1,len(z)):
-                        if len(z[num]) >= len(index):
-                            theOne = num
-            
+                    theOne = z.index(max(z))     
         return boards[theOne]
 
+    def chieck(self,score,board):
 
-    
+        place = 0
+        beside = 0
+        beside2 = 0
+        beside3 = 0
+        maximum = 0
+        maximum2 = 0
+        maximum3 = 0
+        sum1 = 0
+        x = 0
+        y = 0
+        a = 0
+        b = 0
+        
+        for i in range(4):
+            for j in range(4):
+                if board[i][j] > maximum:
+                    maximum = board[i][j]
+                    x = i
+                    y = j
+        
 
+        for i in range(4):
+            for j in range(4):
+                if board[i][j] < maximum  and  board[i][j] > maximum2:
+                    maximum2 = board[i][j]
+                    a = i
+                    b = j
+                else:
+                    a = 2
+                    b = 2
+                
+        for i in range(4):
+            for j in range(4):
+                sum1 += (board[i][j])**2
+                
+        ratio = (maximum/2048.0)        
+        if maximum == board[0][0] or maximum == board[0][3] or maximum == board[3][0] or maximum == board[3][3]:
+            place = 4
+            
+        # check for the middle squares   
+        if (x != 0 and x != 3) and (y != 0 and y != 3):
+            if (board[x][y] == board[x][y-1]) or (board[x][y] == board[x][y+1]) or (board[x][y] == board[x-1][y]) or (board[x][y] == board[x+1][y]):
+                beside = 3
+                
+        # check for the corners squares
+        if x == 0 and y == 0 :
+            if (board[x][y+1] == board[x][y]) or(board[x+1][y] == board[x][y]):
+                beside = 3
+        if x == 0 and y == 3 :
+            if (board[x][y-1] == board[x][y]) or(board[x+1][y] == board[x][y]):
+                beside = 3
+        if x == 3 and y == 0 :
+            if (board[x][y+1] == board[x][y]) or(board[x-1][y] == board[x][y]):
+                beside = 3   
+        if x == 3 and y == 3 :
+            if (board[x][y-1] == board[x][y]) or(board[x-1][y] == board[x][y]):
+                beside = 3
+
+        #in boarders but not in corner 
+        if (x != 0 and y == 0) and (x != 0 and y == 3) :
+            if (board[x][y+1] == board[x][y]) or (board[x+1][y] == board[x][y]) or (board[x][y-1] == board[x][y]):
+                beside = 3
+        if (x != 3 and y == 0) and (x != 3 and y == 3) :
+            if (board[x][y+1] == board[x][y]) or(board[x-1][y] == board[x][y]) or (board[x][y-1] == board[x][y]):
+                beside = 3
+        if (x == 0 and y != 0) and (x == 3 and y != 0) :
+            if (board[x][y+1] == board[x][y]) or(board[x-1][y] == board[x][y]) or (board[x+1][y] == board[x][y]) :
+                beside = 3    
+        if (x == 0 and y != 3) and (x == 3 and y != 3) :
+            if (board[x][y-1] == board[x][y]) or (board[x-1][y] == board[x][y]) or (board[x+1][y] == board[x][y]):
+                beside = 3
+
+        #__________________________________________________________________________
+
+         # check for the middle squares   
+        if (a != 0 and a != 3) and (b != 0 and b != 3):
+            if (board[x][y] == board[a][b-1]) or (board[x][y] == board[a][b+1]) or (board[x][y] == board[a-1][b]) or (board[x][y] == board[a+1][b]):
+                beside2 = 2
+                
+        # check for the corners squares
+        if a == 0 and b == 0 :
+            if (board[a][b+1] == board[x][y]) or(board[a+1][b] == board[x][y]):
+                beside2 = 2
+        if a == 0 and y == 3 :
+            if (board[a][b-1] == board[x][y]) or(board[a+1][b] == board[x][y]):
+                beside2 = 2
+        if a == 3 and b == 0 :
+            if (board[a][b+1] == board[x][y]) or(board[a-1][b] == board[x][y]):
+                beside2 = 2   
+        if a == 3 and b == 3 :
+            if (board[a][b-1] == board[x][y]) or(board[a-1][b] == board[x][y]):
+                beside2 = 2
+
+        #in boarders but not in corner 
+        if (a != 0 and b == 0) and (a != 0 and b == 3) :
+            if (board[a][b+1] == board[x][y]) or (board[a+1][b] == board[x][y]) or (board[a][b-1] == board[x][y]):
+                beside2 = 2
+        if (a != 3 and b == 0) and (a != 3 and b == 3) :
+            if (board[a][b+1] == board[x][y]) or(board[a-1][b] == board[x][y]) or (board[a][b-1] == board[x][y]):
+                beside2 = 2
+        if (a == 0 and b != 0) and (a == 3 and b != 0) :
+            if (board[a][+1] == board[x][y]) or(board[a-1][b] == board[x][y]) or (board[a+1][b] == board[x][y]) :
+                beside2 = 2   
+        if (a == 0 and b != 3) and (a == 3 and b != 3) :
+            if (board[a][b-1] == board[x][y]) or (board[a-1][b] == board[x][y]) or (board[a+1][b] == board[x][y]):
+                beside = 2
+
+        #________________________________________________________________________________
+        # check for the middle squares   
+        if (a != 0 and a != 3) and (b != 0 and b != 3):
+            if (board[a][b] == board[a][b-1]) or (board[a][b] == board[a][b+1]) or (board[a][b] == board[a-1][b]) or (board[a][b] == board[a+1][b]):
+                beside3 = 1
+                
+        # check for the corners squares
+        if a == 0 and b == 0 :
+            if (board[a][b+1] == board[a][b]) or(board[a+1][b] == board[a][b]):
+                beside3 = 1
+        if a == 0 and y == 3 :
+            if (board[a][b-1] == board[a][b]) or(board[a+1][b] == board[a][b]):
+                beside3 = 1
+        if a == 3 and b == 0 :
+            if (board[a][b+1] == board[a][b]) or(board[a-1][b] == board[a][b]):
+                beside3 = 1 
+        if a == 3 and b == 3 :
+            if (board[a][b-1] == board[a][b]) or(board[a-1][b] == board[a][b]):
+                beside3 = 1
+
+        #in boarders but not in corner 
+        if (a != 0 and b == 0) and (a != 3 and b == 0) :
+            if (board[a][b+1] == board[a][b]) or (board[a+1][b] == board[a][b]) or (board[a][b-1] == board[a][b]):
+                beside3 = 2
+        if (a != 3 and b == 0) and (a != 3 and b == 3) :
+            if (board[a][b+1] == board[a][b]) or(board[a-1][b] == board[a][b]) or (board[a][b-1] == board[a][b]):
+                beside3 = 2
+        if (a == 0 and b != 0) and (a == 3 and b != 0) :
+            if (board[a][b+1] == board[a][b]) or(board[a-1][b] == board[a][b]) or (board[a+1][b] == board[a][b]) :
+                beside3 = 2   
+        if (a == 0 and b != 3) and (a == 3 and b != 3) :
+            if (board[a][b-1] == board[a][b]) or (board[a-1][b] == board[a][b]) or (board[a+1][b] == board[a][b]):
+                beside3 = 2
+        #++++++++++++++++++++++++++++++++++++++++++
+
+        for i in range(4):
+            for j in range(3):
+                if board[i][j] == board[i][j+1]:
+                    maximum3 +=1
+
+        for i in range(4):
+            for j in range(1,4):
+                if board[i][j] == board[i][j-1]:
+                    maximum3 +=1
+
+        for i in range(3):
+            for j in range(4):
+                if board[i][j] == board[i+1][j]:
+                    maximum3 +=1
+
+        for i in range(1,4):
+            for j in range(4):
+                if board[i][j] == board[i-1][j]:
+                    maximum3 +=1
+        
+        score2 =  score  + place +  (4+ratio)+ (3+(sum1/((10**len(str(sum1))))))   + (2+(float(beside) / 4)) + (2+(float(beside2) / 4)) + (float(beside3) / 4)  +  (1+(float(maximum3)/100))
+        return score2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
