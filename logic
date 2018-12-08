@@ -870,8 +870,8 @@ class AI2(object):
                 sum1 += (board[i][j])**2
                 
         ratio = (maximum/2048.0)        
-        if maximum == board[0][0] or maximum == board[0][3] or maximum == board[3][0] or maximum == board[3][3]:
-            place = 4
+        if maximum == board[0][0] :#or maximum == board[0][3] or maximum == board[3][0] or maximum == board[3][3]:
+            place = 6
             
         # check for the middle squares   
         if (x != 0 and x != 3) and (y != 0 and y != 3):
@@ -887,7 +887,7 @@ class AI2(object):
                 beside = 3
         if x == 3 and y == 0 :
             if (board[x][y+1] == board[x][y]) or(board[x-1][y] == board[x][y]):
-                beside = 3   
+                beside = 3  
         if x == 3 and y == 3 :
             if (board[x][y-1] == board[x][y]) or(board[x-1][y] == board[x][y]):
                 beside = 3
@@ -911,35 +911,35 @@ class AI2(object):
          # check for the middle squares   
         if (a != 0 and a != 3) and (b != 0 and b != 3):
             if (board[x][y] == board[a][b-1]) or (board[x][y] == board[a][b+1]) or (board[x][y] == board[a-1][b]) or (board[x][y] == board[a+1][b]):
-                beside2 = 2
+                beside2 = 5
                 
         # check for the corners squares
         if a == 0 and b == 0 :
             if (board[a][b+1] == board[x][y]) or(board[a+1][b] == board[x][y]):
-                beside2 = 2
+                beside2 = 5
         if a == 0 and y == 3 :
             if (board[a][b-1] == board[x][y]) or(board[a+1][b] == board[x][y]):
-                beside2 = 2
+                beside2 = 5
         if a == 3 and b == 0 :
             if (board[a][b+1] == board[x][y]) or(board[a-1][b] == board[x][y]):
-                beside2 = 2   
+                beside2 = 5  
         if a == 3 and b == 3 :
             if (board[a][b-1] == board[x][y]) or(board[a-1][b] == board[x][y]):
-                beside2 = 2
+                beside2 = 5
 
         #in boarders but not in corner 
         if (a != 0 and b == 0) and (a != 0 and b == 3) :
             if (board[a][b+1] == board[x][y]) or (board[a+1][b] == board[x][y]) or (board[a][b-1] == board[x][y]):
-                beside2 = 2
+                beside2 = 5
         if (a != 3 and b == 0) and (a != 3 and b == 3) :
             if (board[a][b+1] == board[x][y]) or(board[a-1][b] == board[x][y]) or (board[a][b-1] == board[x][y]):
-                beside2 = 2
+                beside2 = 5
         if (a == 0 and b != 0) and (a == 3 and b != 0) :
             if (board[a][+1] == board[x][y]) or(board[a-1][b] == board[x][y]) or (board[a+1][b] == board[x][y]) :
-                beside2 = 2   
+                beside2 = 5  
         if (a == 0 and b != 3) and (a == 3 and b != 3) :
             if (board[a][b-1] == board[x][y]) or (board[a-1][b] == board[x][y]) or (board[a+1][b] == board[x][y]):
-                beside = 2
+                beside = 5
 
         #________________________________________________________________________________
         # check for the middle squares   
@@ -998,7 +998,6 @@ class AI2(object):
         
         score2 =  score  + place +  (4+ratio)+ (3+(sum1/((10**len(str(sum1))))))   + (2+(float(beside) / 4)) + (2+(float(beside2) / 4)) + (float(beside3) / 4)  +  (1+(float(maximum3)/100))
         return score2
-
 
 
 
