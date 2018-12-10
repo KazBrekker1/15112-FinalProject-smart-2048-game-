@@ -13,32 +13,31 @@ class playerMode(object):
     
     def __init__(self,root):
 
+        #fonts    
         labelfont = ('times', 45, 'bold' )
         buttonfont = ('times', 20, 'bold')
         buttonfont1 = ('times', 16, 'bold')
-
+        #2048
         self.gameLab = Label(root, text = "2048", fg="orange" )        
         self.gameLab.config(font=labelfont)
         self.gameLab.place(x=85 , y=0)
-
+        #onePlayer button
         self.Oneplayer = Button(root,text = 'One Player',bg="orange" ,fg="black", command = self.openOnePlayer )
         self.Oneplayer.config(font=buttonfont)
         self.Oneplayer.place(x=70 , y=75)
-
-        
+        #twoPlayer button
         self.twoPlayers = Button(root,text = '   Two Players   ',bg="orange" ,fg="black"  ,command = self.opentwoPlayers)
         self.twoPlayers.config(font=buttonfont1)
         self.twoPlayers.place(x=69 , y = 140)
-        
+        #VsComputer button
         self.vsComputer = Button(root,text = '  VS Computer ',bg="orange" ,fg="black"  ,command = self.openVscomputer)
         self.vsComputer.config(font=buttonfont1)
         self.vsComputer.place(x=69 , y = 195)
-
+        #AI VS AI button
         self.MainWindow = Button(root,text = '  AI    V S    AI  ',bg="orange" ,fg="black", command = self.openAIvsAI)
         self.MainWindow.config(font=buttonfont1)
         self.MainWindow.place(x=69 , y = 250)
-
-
+        #Exit Button
         self.MainWindow = Button(root,text = 'Exit',bg="orange" ,fg="black", command = self.Exit)
         self.MainWindow.config(font=buttonfont1)
         self.MainWindow.place(x=118 , y = 300)
@@ -65,8 +64,9 @@ class playerMode(object):
     def openVscomputer(self):
         root.destroy()
         root3 = Tk()
-        root3.geometry("1200x1000")
-        screen3 = vsComputer(root3)
+        root3.title("2048")
+        root3.geometry("300x300")
+        screen3 = difficulty(root3)
         root3.mainloop()
 
     #open a window for the AI vs AI mode
@@ -80,7 +80,43 @@ class playerMode(object):
     #Exit the game
     def Exit(self):
         root.destroy()
+
+# this class opens a window that allow you to choose the difficaulty of the VS computer mode       
+class difficulty(object):
+    def __init__(self,root):
+
+        self.root = root
+        labelfont = ('times', 45, 'bold' )
+        buttonfont = ('times', 20, 'bold')
         
+        self.gameLab = Label(root, text = "2048", fg="orange" )        
+        self.gameLab.config(font=labelfont)
+        self.gameLab.place(x=85 , y=5)
+
+        self.Oneplayer = Button(root,text = 'Easy ',bg="orange" ,fg="black", command = self.easy )
+        self.Oneplayer.config(font=buttonfont)
+        self.Oneplayer.place(x=100 , y=90)
+
+        
+        self.twoPlayers = Button(root,text = 'Hard',bg="orange" ,fg="black"  ,command = self.hard)
+        self.twoPlayers.config(font=buttonfont)
+        self.twoPlayers.place(x=100 , y = 160)
+    #easy mode
+    def easy(self):
+        self.root.destroy()
+        root5 = Tk()
+        root5.title("2048")
+        root5.geometry("1200x1000")
+        screen5 = vsComputer(root5, AI1() )
+        root5.mainloop()
+    #hard MODE
+    def hard(self):
+        self.root.destroy()
+        root6 = Tk()
+        root6.title("2048")
+        root6.geometry("1200x1000")
+        screen6 = vsComputer(root6, AI2() )
+        root6.mainloop()
         
 #one player window
 class oneplayer(object):
@@ -108,7 +144,7 @@ class oneplayer(object):
         self.items = []
         
 
-    
+    #back button
     def back(self):
         if self.message == 'You Win!':
             self.root.destroy()
@@ -283,21 +319,21 @@ class twoPlayers(object):
     def key(self,event):
         moves = ['U','D','L','R']
         kp = repr(event.keysym)
-        if kp == "'Up'":
+        if kp == "'w'":
             self.update(self.game.makeMove('U'))
-        elif kp == "'w'" :
+        elif kp == "'Up'" :
             self.update2(self.game2.makeMove('U'))
-        elif kp == "'Down'":
-            self.update(self.game.makeMove('D'))
         elif kp == "'s'":
+            self.update(self.game.makeMove('D'))
+        elif kp == "'Down'":
             self.update2(self.game2.makeMove('D'))
-        elif kp == "'Left'":
-            self.update(self.game.makeMove('L'))
         elif kp == "'a'":
+            self.update(self.game.makeMove('L'))
+        elif kp == "'Left'":
             self.update2(self.game2.makeMove('L'))
-        elif kp == "'Right'":
-            self.update(self.game.makeMove('R'))
         elif kp == "'d'":
+            self.update(self.game.makeMove('R'))
+        elif kp == "'Right'":
             self.update2(self.game2.makeMove('R'))
      
     # update the board of the user
@@ -442,10 +478,11 @@ class twoPlayers(object):
 # vsComputer window
 class vsComputer(object):
     
-    def __init__(self,root):
+    def __init__(self,root,AI):
+        
         # making two boards
         self.game = game_2048()
-        self.game2 = AI2()
+        self.game2 = AI
         self.root = root
         self.labelfont = ('times', 50, 'bold')
         self.root.bind("<Key>",self.key)
@@ -669,6 +706,8 @@ class AIvsAI(object):
         # making two boards
         self.game = AI1()
         self.game2 = AI2()
+        self.ourBoard = copy.deepcopy(self.game.board)
+        self.game2.board = self.ourBoard
         self.update1Message = "__"
         self.update2Message = "__"
         self.root = root
@@ -933,8 +972,8 @@ class check(object):
         self.root.destroy()
         root9 = Tk()
         root9.title("2048")
-        root9.geometry("1200x1000")
-        scrreen9 = vsComputer(root9)
+        root9.geometry("300x350")
+        scrreen9 = difficulty(root9)
         root9.mainloop()
     #open AIvsAI window
     def AIvsAI(self):
@@ -942,7 +981,7 @@ class check(object):
         root10 = Tk()
         root10.title("2048")
         root10.geometry("1200x1000")
-        scrreen10 = AIvsAI(root10)
+        scrreen10 = difficulty(root10)
         root10.mainloop()
         
     #Exit the game
