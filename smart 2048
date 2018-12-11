@@ -981,7 +981,7 @@ class check(object):
         root10 = Tk()
         root10.title("2048")
         root10.geometry("1200x1000")
-        scrreen10 = difficulty(root10)
+        scrreen10 = AIvsAI(root10)
         root10.mainloop()
         
     #Exit the game
